@@ -9,7 +9,7 @@ return {
         "williamboman/mason-lspconfig.nvim",
         config = function()
             require("mason-lspconfig").setup({
-                ensure_installed = { "lua_ls", "clangd", "elixir_ls" },
+                ensure_installed = { "lua_ls", "clangd", "elixirls" },
             })
         end,
     },
@@ -19,16 +19,23 @@ return {
             local lspconfig = require("lspconfig")
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-            lspconfig.lua_ls.setup({
+            vim.lsp.config('lua_ls', {
                 capabilities = capabilities
             })
-            lspconfig.clangd.setup({
+            vim.lsp.config('clangd', {
                 cmd = {
                     "clangd",
                     "--fallback-style=webkit",
                 },
               capabilities = capabilities
             })
+
+            vim.lsp.config('elixirls', {
+                cmd = { vim.fn.expand("~") .. "/elixir_ls/language_server.sh" },
+                capabilities = capabilities
+            })
+
+            vim.lsp.enable('elixirls')
 
             vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
             vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
